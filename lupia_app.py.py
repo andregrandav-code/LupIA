@@ -1,98 +1,78 @@
 
-
-import os
 import streamlit as st
 
-# =========================================
-# CONFIGURACIÓN DE LA PÁGINA
-# =========================================
+# -----------------------------------------------------------
+# CONFIGURACIÓN
+# -----------------------------------------------------------
+
 st.set_page_config(
-    page_title="LupIA",
-    page_icon="L",
+    page_title="LupIA Demo",
     layout="wide",
 )
 
-# Logo (debe estar en el mismo repositorio que este archivo)
-LOGO_PATH = "logo_lupia.jpg"
+st.title("🔎 LupIA – Demo")
 
-# =========================================
-# ENCABEZADO
-# =========================================
-col_logo, col_title = st.columns([1, 4])
+st.write("""
+Esta es una versión DEMO muy básica. 
+Pronto podrás usar:
+- API de OpenAI
+- Modelos configurables
+- Análisis legal/técnico/económico real
+""")
 
-with col_logo:
-    if os.path.exists(LOGO_PATH):
-        st.image(LOGO_PATH, width=120)
-    else:
-        st.write("LupIA")
+# -----------------------------------------------------------
+# CARGA DE ARCHIVOS
+# -----------------------------------------------------------
 
-with col_title:
-    st.markdown(
-        "<h1 style='margin-bottom:0'>LupIA – Análisis automático de procesos públicos</h1>",
-        unsafe_allow_html=True,
-    )
-    st.write("Sube los documentos del proceso y LupIA realizará el análisis automático (demo).")
+st.subheader("Carga de documentos")
 
-st.markdown("---")
-
-# =========================================
-# PANEL LATERAL (API KEY FUTURA)
-# =========================================
-st.sidebar.header("Configuración")
-
-st.sidebar.write(
-    "En futuras versiones aquí podrás ingresar la API Key de OpenAI, configurar modelos, etc."
+uploaded_pliego = st.file_uploader(
+    "Sube el Pliego",
+    type=["pdf"],
+    accept_multiple_files=False,
+    key="pliego"
 )
 
-# =========================================
-# CARGA DE ARCHIVOS
-# =========================================
-st.subheader("Subir documentos del proceso")
+uploaded_oferta = st.file_uploader(
+    "Sube la Oferta",
+    type=["pdf"],
+    accept_multiple_files=False,
+    key="oferta"
+)
 
-col1, col2 = st.columns(2)
+# Mostrar nombres cuando estén cargados
+if uploaded_pliego:
+    st.success(f"📄 Pliego cargado: {uploaded_pliego.name}")
 
-with col1:
-    pliego = st.file_uploader("Sube el pliego (PDF)", type=["pdf"])
+if uploaded_oferta:
+    st.success(f"📄 Oferta cargada: {uploaded_oferta.name}")
 
-with col2:
-    oferta = st.file_uploader("Sube la oferta (PDF)", type=["pdf"])
 
-st.markdown("---")
+# -----------------------------------------------------------
+# BOTÓN DE ANÁLISIS
+# -----------------------------------------------------------
 
-# =========================================
-# ANÁLISIS BÁSICO (DEMO)
-# =========================================
-st.subheader("Análisis (versión demo)")
+st.write("---")
 
-if pliego and oferta:
-    st.success("Archivos cargados correctamente.")
-
-    st.write(
-        """
-        Esta es una versión demo de LupIA en línea.
-
-        En la versión completa, LupIA hará lo siguiente:
-
-        1. Leer el pliego y extraer:
-           - especificaciones técnicas,
-           - experiencia requerida,
-           - condiciones legales y económicas.
-
-        2. Leer la oferta y extraer:
-           - características de los equipos/servicios ofertados,
-           - experiencia real del oferente,
-           - precios y condiciones.
-
-        3. Comparar automáticamente pliego vs. oferta:
-           - requisitos cumplidos / no cumplidos,
-           - observaciones legales y técnicas,
-           - análisis de riesgos y recomendaciones.
-
-        4. Generar un informe en formato:
-           - resumen ejecutivo,
-           - detalle técnico,
-           - conclusiones y puntaje.
-        """
-    )
+if uploaded_pliego and uploaded_oferta:
+    if st.button("🔍 Ejecutar análisis"):
+        st.success("Analizando documentos…")
+        st.write("""
+        Aquí irá el resultado del análisis técnico, legal y económico.
+        
+        - Extracción de requisitos del pliego
+        - Extracción de características de la oferta
+        - Comparación automática
+        - Semáforo de cumplimiento
+        - Conclusión
+        """)
 else:
-    st.info("Sube **ambos** archivos (pliego y oferta) para iniciar el análisis.")
+    st.info("➡️ Carga el pliego y la oferta para iniciar.")
+
+# -----------------------------------------------------------
+# PIE DE PÁGINA
+# -----------------------------------------------------------
+
+st.write("---")
+st.caption("LupIA · Versión demo · Próximamente análisis real con IA")
+
