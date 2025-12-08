@@ -1,0 +1,5 @@
+streamlit
+crewai
+pypdf
+fpdf
+openai
